@@ -10,7 +10,7 @@ class Genre(Enum):
     Action = "Action" 
     Adventure = "Adventure" 
     Animation = "Animation"
-    Children = "Children's"
+    Children = "Children"
     Comedy = "Comedy"
     Crime = "Crime"
     Documentary = "Documentary"
@@ -25,6 +25,7 @@ class Genre(Enum):
     Thriller = "Thriller"
     War = "War"
     Western = "Western"
+    IMAX = "IMAX"
 
 class MoviesDataModel(BaseModel):
     movieId: int

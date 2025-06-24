@@ -3,9 +3,7 @@ from typing import Dict
 import csv
 from datetime import datetime
 
-moviesPath  = "data/movies.csv"
-userRatingPath = "data/user_rating_history.csv"
-beliefDataPath = "data/belief_data.csv"
+
 
 def moviesDataLoader(path : str) -> Dict [int, MoviesDataModel]:
     movieDict = {}
@@ -20,8 +18,11 @@ def moviesDataLoader(path : str) -> Dict [int, MoviesDataModel]:
             else:
                 genres = []
                 for g in genres_str.split("|"):
+                    g_clean = g.strip()
+                    if not g_clean:
+                        continue
                     try:
-                        genres.append(Genre(g))
+                        genres.append(Genre(g_clean))
                     except ValueError:
                         print(f"Warning: Invalid Genre '{g}' in movie_id {movieId}")
 
