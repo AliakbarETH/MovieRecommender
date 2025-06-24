@@ -1,14 +1,15 @@
-from src.dataModels import MoviesDataModel, Genre, UserRatingHistoryModel
+from src.dataModels import MoviesDataModel, Genre, UserRatingHistoryModel, BeliefDataModel
 from typing import Dict 
 import csv
 from datetime import datetime
 
 moviesPath  = "data/movies.csv"
 userRatingPath = "data/user_rating_history.csv"
+beliefDataPath = "data/belief_data.csv"
 
-def moviesDataLoader(moviesPath : str) -> Dict [int, MoviesDataModel]:
+def moviesDataLoader(path : str) -> Dict [int, MoviesDataModel]:
     movieDict = {}
-    with open(moviesPath, "r", encoding="utf-8") as f:
+    with open(path, "r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
             movieId = int(row["movieId"])
@@ -33,9 +34,9 @@ def moviesDataLoader(moviesPath : str) -> Dict [int, MoviesDataModel]:
 
     return movieDict
 
-def userRatingHistoryLoader(userRatingPath : str) -> Dict [int,UserRatingHistoryModel]:
+def userRatingHistoryLoader(path : str) -> Dict [int,UserRatingHistoryModel]:
     UserRatingHistoryDict = {}
-    with open(userRatingPath, "r", encoding="utf-8") as f:
+    with open(path, "r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
             userId = int(row["userId"])
@@ -54,4 +55,53 @@ def userRatingHistoryLoader(userRatingPath : str) -> Dict [int,UserRatingHistory
             UserRatingHistoryDict[userId] = UserRatingInstance
     return UserRatingHistoryDict
 
-print(userRatingHistoryLoader(userRatingPath))
+def BeliefDataLoader(path : str) -> Dict [int, BeliefDataModel]:
+    BeliefDataDict = {}
+    with open(path, "r", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            userId = int(row["userId"])
+            movieId = int(row["movieId"])
+            isSeen = int(row["isSeen"])  
+            watchDate = (
+                datetime.strptime(row["watchDate"], "%Y-%m-%d %H:%M:%S")
+                if row["watchDate"].strip() != ""
+                else None
+            )            
+            userElicitRating = (
+                float(row["userElicitRating"])
+                if row["userElicitRating"].strip() not in ["", "NA"]
+                else None 
+            )
+            userPredictRating = (
+                float(row["userPredictRating"])
+                if row["userPredictRating"].strip() not in ["", "NA"]
+                else None
+            )
+            userCertainty = (
+                float(row["userCertainty"])
+                if row["userCertainty"].strip() not in ["", "NA"]
+                else None
+            )
+            tstamp = datetime.strptime(row["tstamp"], "%Y-%m-%d %H:%M:%S" )
+            movie_idx = int(row["movie_idx"])
+            source = int(row["source"])
+            systemPredictRating = float(row["systemPredictRating"])
+            beliefDataInstance = BeliefDataModel (
+                    userId = userId,
+                    movieId = movieId,
+                    isSeen = isSeen, 
+                    watchDate = watchDate,
+                    userElicitRating = userElicitRating,
+                    userPredictRating = userPredictRating,
+                    userCertainty = userCertainty,
+                    tstamp = tstamp,
+                    movie_idx = movie_idx,
+                    source = source,
+                    systemPredictRating = systemPredictRating
+            )
+            BeliefDataDict[userId] = beliefDataInstance
+
+    return BeliefDataDict
+
+

@@ -49,7 +49,7 @@ class BeliefDataModel(BaseModel):
     userElicitRating: Optional[float]
     userPredictRating: Optional[float]
     userCertainty: Optional[float]
-    timestamp: datetime 
+    tstamp: datetime 
     movie_idx: int
     source: int
     systemPredictRating: float
