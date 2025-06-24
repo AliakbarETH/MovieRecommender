@@ -27,15 +27,15 @@ class Genre(Enum):
     Western = "Western"
 
 class MoviesDataModel(BaseModel):
-    movieId : int
+    movieId: int
     title : str
-    genere : List[Genre]
+    genres : List[Genre]
     
 # defining data model for user_rating_history.csv file
 
 class UserRatingHistoryModel(BaseModel):
     userId : int 
-    movidId : int  
+    movieId: int  
     rating : float 
     tstamp : datetime
 
