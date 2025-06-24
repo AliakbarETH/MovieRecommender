@@ -1,13 +1,15 @@
-from src.dataModels import MoviesDataModel, Genre
+from src.dataModels import MoviesDataModel, Genre, UserRatingHistoryModel
 from typing import Dict 
-import csv, os
+import csv
+from datetime import datetime
 
-path  = "data/movies.csv"
+moviesPath  = "data/movies.csv"
+userRatingPath = "data/user_rating_history.csv"
 
-def moviesDataLoader(path : str) -> Dict [int, MoviesDataModel]:
-    with open(path, "r", encoding="utf-8") as f:
+def moviesDataLoader(moviesPath : str) -> Dict [int, MoviesDataModel]:
+    movieDict = {}
+    with open(moviesPath, "r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
-        movieDict = {}
         for row in reader:
             movieId = int(row["movieId"])
             title = row["title"]
@@ -31,6 +33,25 @@ def moviesDataLoader(path : str) -> Dict [int, MoviesDataModel]:
 
     return movieDict
 
-#print(moviesDataLoader(path))
+def userRatingHistoryLoader(userRatingPath : str) -> Dict [int,UserRatingHistoryModel]:
+    UserRatingHistoryDict = {}
+    with open(userRatingPath, "r", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            userId = int(row["userId"])
+            movieId = int(row["movieId"])
+            tstamp = datetime.strptime(row["tstamp"], "%Y-%m-%d %H:%M:%S")
+            if row["rating"] == "NA":
+                continue
+            else:
+                rating = float(row["rating"])
+            UserRatingInstance = UserRatingHistoryModel(
+                    userId = userId,
+                    movieId = movieId, 
+                    rating = rating, 
+                    tstamp = tstamp
+            )
+            UserRatingHistoryDict[userId] = UserRatingInstance
+    return UserRatingHistoryDict
 
-#print(os.path.exists(path)) 
+print(userRatingHistoryLoader(userRatingPath))
